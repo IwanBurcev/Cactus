@@ -44,7 +44,7 @@ valid_dataloader = DataLoader(Dataset(valid_data, training=False), batch_size=35
 
 model = Model()
 
-for epoch in range(0, 200):
+for epoch in range(0, 400):
     print(epoch)
     for data in train_dataloader:
         train_loss = model.train(data)
