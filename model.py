@@ -39,6 +39,16 @@ class Model():
 
         return loss.item()
 
+    def predict(self, data):
+        image, _ = data
+
+        image = image.to(self.gpu)
+
+        with torch.no_grad():
+            output = self.sigmoid(self.net(image))
+
+        return np.argmax(output.detach().cpu().numpy(), axis=1)
+
     def valid(self, data):
         image, labels = self.data_to_gpu(data)
 
