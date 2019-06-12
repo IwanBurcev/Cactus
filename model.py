@@ -1,3 +1,5 @@
+import numpy as np
+
 import torch
 import torch.nn as nn
 from torch.optim import Adam
@@ -44,7 +46,11 @@ class Model():
 
         loss = self.loss(output, labels)
 
-        return loss.item()
+        predictions = np.argmax(output.detach().cpu().numpy(), axis=1)
+        targets = labels.detach().cpu().numpy()
+        accuracy = 1 - sum(np.logical_xor(predictions, targets)) / len(targets)
+
+        return loss.item(), accuracy
 
 
 class Net(nn.Module):
@@ -63,13 +69,13 @@ class Net(nn.Module):
 
     def forward(self, x):
         x = self.conv1(x)
-        x = self.bn1(x)
         x = self.relu(x)
+        x = self.bn1(x)
         x = self.maxpool(x)
 
         x = self.conv2(x)
-        x = self.bn2(x)
         x = self.relu(x)
+        x = self.bn2(x)
         x = self.maxpool(x)
 
         x = x.view(x.size(0), -1)
