@@ -2,10 +2,10 @@ import cv2
 import numpy as np
 import pandas as pd
 from pathlib import Path
-
-from dataset import Dataset
 from torch.utils.data import DataLoader
 
+from dataset import Dataset
+from model import Model
 
 def data_split(train_folder, anno_file):
 
@@ -44,6 +44,11 @@ train_data, valid_data = data_split(train_data, anno_file)
 train_dataloader = DataLoader(Dataset(train_data, training=True), batch_size=10)
 valid_dataloader = DataLoader(Dataset(valid_data, training=False), batch_size=10)
 
-for data in train_dataloader:
-    print(data)
-    break
+model = Model()
+
+for epoch in range(0, 1000):
+    for data in train_dataloader:
+        train_loss = model.train(data)
+
+    for data in valid_dataloader:
+        val_loss = model.valid(data)

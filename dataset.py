@@ -1,3 +1,4 @@
+import torch
 import numpy as np
 
 
@@ -13,6 +14,8 @@ class Dataset():
         image, label = self.samples[item]
 
         image = self.normalize(image)
+        image = np.transpose(image, axes=[2, 0, 1])
+        image = torch.FloatTensor(image)
 
         return image, label
 
